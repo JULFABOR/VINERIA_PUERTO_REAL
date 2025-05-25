@@ -37,6 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'APERTURA_CAJA',
+    'CIERRE_CAJA',
+    'CONTROL_COMPRAS',
+    'CONTROL_INGRESOS_EGRESOS',
+    'CONTROL_STOCK',
+    'CONTROL_VENTAS',
+    'FIDELIZACION_CLIENTES',
 ]
 
 MIDDLEWARE = [
