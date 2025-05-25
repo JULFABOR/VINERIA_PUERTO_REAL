@@ -1,3 +1,4 @@
+## modelo de base de datos para importar a las apps
 from django.db import models
 
 class Provincias(models.Model):
