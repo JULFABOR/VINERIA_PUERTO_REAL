@@ -1,0 +1,13 @@
+<h1>Lista de Productos</h1>
+<a href="{% url 'control_stock:producto-create' %}">Agregar nuevo producto</a>
+<ul>
+  {% for producto in object_list %}
+    <li>
+      <a href="{% url 'control_stock:producto-detail' producto.pk %}">
+        {{ producto.nombre }} - {{ producto.marca }}
+      </a>
+    </li>
+  {% empty %}
+    <li>No hay productos registrados.</li>
+  {% endfor %}
+</ul>

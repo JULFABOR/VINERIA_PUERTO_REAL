@@ -1,0 +1,10 @@
+<h1>Detalle del Producto</h1>
+<p>Nombre: {{ object.nombre }}</p>
+<p>Marca: {{ object.marca }}</p>
+<p>Tipo: {{ object.tipo }}</p>
+<p>Precio: ${{ object.precio_unitario }}</p>
+<p>Descripción: {{ object.descripcion }}</p>
+
+<a href="{% url 'control_stock:producto-update' object.pk %}">Editar</a> |
+<a href="{% url 'control_stock:producto-delete' object.pk %}">Eliminar</a> |
+<a href="{% url 'control_stock:producto-list' %}">Volver</a>
