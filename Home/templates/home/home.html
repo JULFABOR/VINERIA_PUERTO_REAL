@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puerto Real</title>
+    <link rel="stylesheet" href="{% static 'Home/estilos_home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <body>
+      <div>
+          <header id="header">
+              <div id="logo-container">
+                <img src="{% static 'home/img/logo1.png' %}" alt="Logo" width="150">
+              </div>
+              <nav id="nav">
+              <ul>
+                  <li><a href="#inicio" class="boton">Inicio</a></li>
+                  <li><a href="#nosotros" class="boton">Sobre Nosotros</a></li>
+                  <li><a href="#productos" class="boton"> Productos</a></li>
+                  <li><a href="#tienda" class="boton"> Tienda Online</a></li>
+                  <li><a href="#contacto" class="boton"> Contacto</a></li>
+              </ul>
+              </nav>
+          </header>
+      </div>
+
+      <div class="div" id="inicio">
+        <h2>Bienvenidos a Puerto Real</h2>
+        <p>Tu vinoteca de confianza. Vinos seleccionados, atención personalizada.</p>
+      </div>
+
+      <div class="div" id="nosotros">
+        <h2>Sobre Nosotros</h2>
+        <p>Puerto Real nace de la pasión por el vino. Descubrí nuestra historia.</p>
+      </div>
+
+      <div class="div" id="productos">
+        <h2>Nuestros Productos</h2>
+        <p>Explorá nuestra selección de Productos Destacados.</p>
+        <div class="articulos">
+            <div class="producto">
+                <img src="https://via.placeholder.com/200x250?text=Malbec" alt="Vino Malbec">
+                <h3>Malbec Reserva</h3>
+                <p>Vino tinto intenso, 750ml</p>
+                <span>$4.200</span>
+                <button onclick="agregarAlCarrito('Malbec Reserva', 4200)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://via.placeholder.com/200x250?text=Malbec" alt="Coca Cola 3L">
+                <h3>Coca Cola 3L</h3>
+                <p>Gaseosa sabor cola, 3l</p>
+                <span>$4.200</span>
+                <button onclick="agregarAlCarrito('Coca Cola', 4200)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://via.placeholder.com/200x250?text=Cabernet" alt="Vino Cabernet">
+                <h3>Cabernet Sauvignon</h3>
+                <p>Elegante y complejo, 750ml</p>
+                <span>$4.800</span>
+                <button onclick="agregarAlCarrito('Cabernet Sauvignon', 4200)">Agregar al carrito</button>
+            </div>
+        
+            <div class="producto">
+                <img src="https://via.placeholder.com/200x250?text=Rosado" alt="Vino Rosado">
+                <h3>Rosado de Verano</h3>
+                <p>Fresco y frutado, 750ml</p>
+                <span>$3.900</span>
+                <button onclick="agregarAlCarrito('Rosado Verano', 4200)">Agregar al carrito</button>
+            </div>
+        </div>
+      </div>
+
+      <button id="toggleCarritoBtn" onclick="toggleCarrito()"><i class="fa fa-shopping-cart"></i></button>
+
+      <div id="carrito" class="minimizado">
+          <div id="carritocontenido"">
+            <h2 style="text-align: center;">Carrito</h2>
+            <ul id="lista-carrito"></ul>
+            <p>Total: $<span id="total">0</span></p>
+            <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+            <a id="whatsapp-link" href="#" target="_blank">
+                <button><i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp</button>
+            </a>
+          </div>
+      </div>
+
+      <div class="div" id="contacto">
+        <h2>Contacto</h2>
+        <p> Escribinos a: contacto@puertoreal.com.ar</p>
+      </div>
+
+      <div>
+        <footer>
+          <p>&copy; 2025 Puerto Real. Todos los derechos reservados.</p>
+        </footer>
+      </div>
+
+    <script>
+    const carrito = [];
+    let total = 0;
+
+    function agregarAlCarrito(producto, precio) {
+      carrito.push({ producto, precio });
+      total += precio;
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      const lista = document.getElementById('lista-carrito');
+      const totalSpan = document.getElementById('total');
+      lista.innerHTML = '';
+      carrito.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.producto} - $${item.precio}`;
+        lista.appendChild(li);
+      });
+      totalSpan.textContent = total;
+      actualizarLinkWhatsApp();
+    }
+
+    function vaciarCarrito() {
+      carrito.length = 0;
+      total = 0;
+      actualizarCarrito();
+    }
+
+    function actualizarLinkWhatsApp() {
+      const link = document.getElementById('whatsapp-link');
+      const mensaje = carrito.map(item => `• ${item.producto}: $${item.precio}`).join('%0A') +
+        `%0A%0ATotal%Productos: $${total}`;
+      const telefono = '5493875748976';
+      link.href = `https://wa.me/${telefono}?text=${mensaje}`;
+    }
+
+    function toggleCarrito() {
+        const carritoSection = document.getElementById("carrito");
+        const boton = document.getElementById("toggleCarritoBtn");
+        
+        carritoSection.classList.toggle("minimizado");
+        
+        if (carritoSection.classList.contains("minimizado")) {
+          boton.prepend(document.createElement("i")).classList.add("fa", "fa-shopping-cart");
+        } else {
+          boton.prepend(document.createElement("i")).classList.add("fa", "fa-shopping-cart");
+        }
+      }
+    </script>
+  </body>
+
+</html>
