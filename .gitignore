@@ -1,0 +1,24 @@
+# Entorno virtual
+venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+
+# Base de datos SQLite (si usás)
+db.sqlite3
+
+# Archivos de entorno (variables sensibles)
+.env
+
+# Archivos temporales del sistema
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Archivos compilados de Django
+*.pyc
+
+# Archivos estáticos recolectados
+/staticfiles/
