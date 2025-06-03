@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listado de Stock</title>
+</head>
+<body>
+    <h1>Stock de Productos</h1>
+    <a href="{% url 'crear_stock' %}">Agregar nuevo stock</a>
+    <table>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+        </tr>
+        {% for item in stocks %}
+        <tr>
+            <td>{{ item.producto }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>
+                <a href="{% url 'editar_stock' item.id %}">Editar</a> |
+                <a href="{% url 'eliminar_stock' item.id %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
