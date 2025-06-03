@@ -5,7 +5,7 @@ venv/
 __pycache__/
 *.py[cod]
 
-# Base de datos SQLite (si usás)
+# Base de datos SQLite
 db.sqlite3
 
 # Archivos de entorno (variables sensibles)

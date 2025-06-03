@@ -37,7 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apertura_caja',
+    'cierre_caja',
+    'control_ventas',
+    'control_ingresos_egresos',
     'control_compras',
+    'manejo_stock',
+    'fidelizacion_clientes',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +82,9 @@ WSGI_APPLICATION = 'PUERTO_REAL.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysqlpuertoreal',
+        'NAME': 'puerto_real',
         'USER': 'root',
-        'PASSWORD': 'Chingolo112.',
+        'PASSWORD': '3003',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
