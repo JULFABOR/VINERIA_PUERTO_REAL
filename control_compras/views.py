@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from .models import Productos, Proveedores, Compras, Detalle_Compras, Pedidos_Proveedores, Detalle_Pedidos_Proveedores
+from Home.models import Productos, Proveedores, Compras, Detalle_Compras, Pedidos_Proveedores, Detalle_Pedidos_Proveedores
 from .forms import ProductosForm, ProveedoresForm, Detalle_ComprasForm, Pedidos_ProveedoresForm, Detalle_Pedidos_ProveedoresForm
 
 def lista_productos(request):

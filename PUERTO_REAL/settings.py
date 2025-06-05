@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'control_compras',
     'manejo_stock',
     'fidelizacion_clientes',
+    'Home',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'PUERTO_REAL.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'puerto_real',
+        'NAME': 'DBPuertoReal',
         'USER': 'root',
         'PASSWORD': '3003',
         'HOST': 'localhost',

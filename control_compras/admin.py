@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Productos,Proveedores,Compras,Detalle_Compras,Pedidos_Proveedores,Detalle_Pedidos_Proveedores
+from Home.models import Productos,Proveedores,Compras,Detalle_Compras,Pedidos_Proveedores,Detalle_Pedidos_Proveedores
 
 admin.site.register(Productos)
 admin.site.register(Proveedores)

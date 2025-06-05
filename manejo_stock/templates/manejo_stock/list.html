@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Movimientos de Stock</title>
+</head>
+<body>
+    <h1>Movimientos de Stock</h1>
+    <a href="{% url 'stock_create' %}">Nuevo Movimiento</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad Antes</th>
+            <th>Cantidad Después</th>
+            <th>Fecha y Hora</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+        </tr>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{ stock.id_stock }}</td>
+            <td>{{ stock.producto }}</td>
+            <td>{{ stock.cant_before_stock }}</td>
+            <td>{{ stock.cant_after_stock }}</td>
+            <td>{{ stock.datetime_stock }}</td>
+            <td>{{ stock.reasonchange_stock }}</td>
+            <td>
+                <a href="{% url 'stock_update' stock.id_stock %}">Editar</a> |
+                <a href="{% url 'stock_delete' stock.id_stock %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Movimiento de Stock</title>
+</head>
+<body>
+    <h1>¿Estás seguro que deseas eliminar este movimiento de stock?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+        <a href="{% url 'lista_stock' %}">Cancelar</a>
+    </form>
+</body>
+</html>
