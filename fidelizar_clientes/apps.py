@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AperturaCajaConfig(AppConfig):
+class FidelizarClientesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apertura_caja'
+    name = 'fidelizar_clientes'

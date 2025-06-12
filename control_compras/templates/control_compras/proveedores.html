@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestión de Proveedores</h2>
+    <button class="btn btn-primary mb-3" id="btn-nuevo">Nuevo Proveedor</button>
+    <table class="table table-bordered" id="tabla-proveedores">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Razón Social</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>CUIT</th>
+                <th>Activo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" tabindex="-1" id="modalProveedor">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Nuevo Proveedor</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-proveedor">
+          <input type="hidden" id="id_prov" name="id_prov">
+          <div class="mb-3">
+            <label for="name_prov" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name_prov" name="name_prov" required>
+          </div>
+          <div class="mb-3">
+            <label for="registered_name_prov" class="form-label">Razón Social</label>
+            <input type="text" class="form-control" id="registered_name_prov" name="registered_name_prov" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone_prov" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="phone_prov" name="phone_prov" required>
+          </div>
+          <div class="mb-3">
+            <label for="mail_prov" class="form-label">Email</label>
+            <input type="email" class="form-control" id="mail_prov" name="mail_prov" required>
+          </div>
+          <div class="mb-3">
+            <label for="cuit_prov" class="form-label">CUIT</label>
+            <input type="text" class="form-control" id="cuit_prov" name="cuit_prov" required>
+          </div>
+          <div class="mb-3">
+            <label for="active_prov" class="form-label">Activo</label>
+            <select class="form-control" id="active_prov" name="active_prov">
+              <option value="true">Sí</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    cargarProveedores();
+
+    function cargarProveedores() {
+        $.getJSON("/control_compras/proveedores/list/", function(data) {
+            let filas = '';
+            data.forEach(function(prov) {
+                filas += `<tr>
+                    <td>${prov.id_prov}</td>
+                    <td>${prov.name_prov}</td>
+                    <td>${prov.registered_name_prov}</td>
+                    <td>${prov.phone_prov}</td>
+                    <td>${prov.mail_prov}</td>
+                    <td>${prov.cuit_prov}</td>
+                    <td>${prov.active_prov ? 'Sí' : 'No'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btn-editar" data-id="${prov.id_prov}">Editar</button>
+                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${prov.id_prov}">Eliminar</button>
+                    </td>
+                </tr>`;
+            });
+            $('#tabla-proveedores tbody').html(filas);
+        });
+    }
+
+    $('#btn-nuevo').click(function() {
+        $('#form-proveedor')[0].reset();
+        $('#id_prov').val('');
+        $('#modalTitle').text('Nuevo Proveedor');
+        $('#modalProveedor').modal('show');
+    });
+
+    $(document).on('click', '.btn-editar', function() {
+        let id = $(this).data('id');
+        $.getJSON(`/control_compras/proveedores/${id}/detail/`, function(data) {
+            $('#id_prov').val(data.id_prov);
+            $('#name_prov').val(data.name_prov);
+            $('#registered_name_prov').val(data.registered_name_prov);
+            $('#phone_prov').val(data.phone_prov);
+            $('#mail_prov').val(data.mail_prov);
+            $('#cuit_prov').val(data.cuit_prov);
+            $('#active_prov').val(data.active_prov ? 'true' : 'false');
+            $('#modalTitle').text('Editar Proveedor');
+            $('#modalProveedor').modal('show');
+        });
+    });
+
+    $('#btn-guardar').click(function() {
+        let id = $('#id_prov').val();
+        let datos = {
+            name_prov: $('#name_prov').val(),
+            registered_name_prov: $('#registered_name_prov').val(),
+            phone_prov: $('#phone_prov').val(),
+            mail_prov: $('#mail_prov').val(),
+            cuit_prov: $('#cuit_prov').val(),
+            active_prov: $('#active_prov').val() === 'true'
+        };
+        if (id) {
+            $.ajax({
+                url: `/control_compras/proveedores/${id}/update/`,
+                method: 'POST',
+                data: datos,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    $('#modalProveedor').modal('hide');
+                    cargarProveedores();
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/control_compras/proveedores/create/',
+                method: 'POST',
+                data: datos,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    $('#modalProveedor').modal('hide');
+                    cargarProveedores();
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.btn-eliminar', function() {
+        let id = $(this).data('id');
+        if (confirm('¿Seguro que desea eliminar este proveedor?')) {
+            $.ajax({
+                url: `/control_compras/proveedores/${id}/delete/`,
+                method: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    cargarProveedores();
+                }
+            });
+        }
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}

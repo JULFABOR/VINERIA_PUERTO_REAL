@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Gestión de Clientes</h2>
+    <button class="btn btn-primary mb-3" id="btn-nuevo">Nuevo Cliente</button>
+    <table class="table table-bordered" id="tabla-clientes">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Fecha Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se cargan los clientes con JS -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para crear/editar cliente -->
+<div class="modal" tabindex="-1" id="modalCliente">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Nuevo Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-cliente">
+          <input type="hidden" id="id_cli" name="id_cli">
+          <div class="mb-3">
+            <label for="name_cli" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name_cli" name="name_cli" required>
+          </div>
+          <div class="mb-3">
+            <label for="dni_cli" class="form-label">DNI</label>
+            <input type="text" class="form-control" id="dni_cli" name="dni_cli" required>
+          </div>
+          <div class="mb-3">
+            <label for="mail_cli" class="form-label">Email</label>
+            <input type="email" class="form-control" id="mail_cli" name="mail_cli" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone_cli" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="phone_cli" name="phone_cli" required>
+          </div>
+          <div class="mb-3">
+            <label for="date_reg_cli" class="form-label">Fecha Registro</label>
+            <input type="date" class="form-control" id="date_reg_cli" name="date_reg_cli" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    cargarClientes();
+
+    function cargarClientes() {
+        $.getJSON("/fidelizar_clientes/clientes/list/", function(data) {
+            let filas = '';
+            data.forEach(function(cli) {
+                filas += `<tr>
+                    <td>${cli.id_cli}</td>
+                    <td>${cli.name_cli}</td>
+                    <td>${cli.dni_cli}</td>
+                    <td>${cli.mail_cli}</td>
+                    <td>${cli.phone_cli}</td>
+                    <td>${cli.date_reg_cli}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btn-editar" data-id="${cli.id_cli}">Editar</button>
+                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${cli.id_cli}">Eliminar</button>
+                    </td>
+                </tr>`;
+            });
+            $('#tabla-clientes tbody').html(filas);
+        });
+    }
+
+    $('#btn-nuevo').click(function() {
+        $('#form-cliente')[0].reset();
+        $('#id_cli').val('');
+        $('#modalTitle').text('Nuevo Cliente');
+        $('#modalCliente').modal('show');
+    });
+
+    $(document).on('click', '.btn-editar', function() {
+        let id = $(this).data('id');
+        $.getJSON(`/fidelizar_clientes/clientes/${id}/detail/`, function(data) {
+            $('#id_cli').val(data.id_cli);
+            $('#name_cli').val(data.name_cli);
+            $('#dni_cli').val(data.dni_cli);
+            $('#mail_cli').val(data.mail_cli);
+            $('#phone_cli').val(data.phone_cli);
+            $('#date_reg_cli').val(data.date_reg_cli);
+            $('#modalTitle').text('Editar Cliente');
+            $('#modalCliente').modal('show');
+        });
+    });
+
+    $('#btn-guardar').click(function() {
+        let id = $('#id_cli').val();
+        let datos = {
+            name_cli: $('#name_cli').val(),
+            dni_cli: $('#dni_cli').val(),
+            mail_cli: $('#mail_cli').val(),
+            phone_cli: $('#phone_cli').val(),
+            date_reg_cli: $('#date_reg_cli').val()
+        };
+        if (id) {
+            $.ajax({
+                url: `/fidelizar_clientes/clientes/${id}/update/`,
+                method: 'POST',
+                data: datos,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    $('#modalCliente').modal('hide');
+                    cargarClientes();
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/fidelizar_clientes/clientes/create/',
+                method: 'POST',
+                data: datos,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    $('#modalCliente').modal('hide');
+                    cargarClientes();
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.btn-eliminar', function() {
+        let id = $(this).data('id');
+        if (confirm('¿Seguro que desea eliminar este cliente?')) {
+            $.ajax({
+                url: `/fidelizar_clientes/clientes/${id}/delete/`,
+                method: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                success: function() {
+                    cargarClientes();
+                }
+            });
+        }
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}

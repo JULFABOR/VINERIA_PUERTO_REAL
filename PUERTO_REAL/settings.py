@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+esrwm2dp3!l_$)&j+8is%5y%*15$z!s1cjgm*d=jq6lo@u9(&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1:8000','localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,14 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apertura_caja',
-    'cierre_caja',
-    'control_ventas',
-    'control_ingresos_egresos',
     'control_compras',
     'manejo_stock',
-    'fidelizacion_clientes',
     'Home',
+    'fidelizar_clientes',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

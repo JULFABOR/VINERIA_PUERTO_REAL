@@ -1,14 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from home.models import Stocks
+from django.shortcuts import render, redirect
+from Home.models import Stocks
 from .forms import StocksForm
 
-# Listar stocks
 
 def lista_stock(request):
     stocks = Stocks.objects.all()
     return render(request, 'manejo_stock/list.html', {'stocks': stocks})
 
-# Crear stock
 
 def stock_create(request):
     if request.method == 'POST':
@@ -20,8 +18,6 @@ def stock_create(request):
         form = StocksForm()
     return render(request, 'manejo_stock/form.html', {'form': form, 'titulo': 'Nuevo Movimiento de Stock'})
 
-# Editar stock
-
 def stock_update(request, pk):
     stock = get_object_or_404(Stocks, pk=pk)
     form = StocksForm(request.POST or None, instance=stock)
@@ -29,8 +25,6 @@ def stock_update(request, pk):
         form.save()
         return redirect('lista_stock')
     return render(request, 'manejo_stock/form.html', {'form': form, 'titulo': 'Editar Movimiento de Stock'})
-
-# Eliminar stock
 
 def stock_delete(request, pk):
     stock = get_object_or_404(Stocks, pk=pk)
